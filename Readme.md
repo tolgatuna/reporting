@@ -1,6 +1,8 @@
 # API Details
 
-### Swagger File Generation
+### API Heroku URL
+http://reporting-api-duriancodes.herokuapp.com/api/v3
 
-### Tests
+### Postman Scripts
+To test API, import postman collections which are under `/src/test/resources/postman`
 

@@ -1,0 +1,226 @@
+{
+	"info": {
+		"_postman_id": "a8cf08a9-a81f-4687-968f-54d6ef75a7ba",
+		"name": "ReportingAPIHomework",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4f287c63-75cf-491b-809a-e6263b597c37",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "07785e26-2424-4c43-be18-ee3fb1a4ab6e",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"Bareer\", jsonData.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\":\"demo@financialhouse.io\",\n\t\"password\":\"cjaiU8CV\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/merchant/user/login",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"merchant",
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction-List",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Bareer}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"fromDate\": \"2015-07-01\",\n    \"toDate\": \"2020-02-01\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/transaction/list",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"transaction",
+						"list"
+					]
+				},
+				"description": "Get List of Transactions"
+			},
+			"response": []
+		},
+		{
+			"name": "Transactions Report",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Bareer}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"fromDate\": \"2015-07-01\",\n    \"toDate\": \"2020-02-01\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/transactions/report",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"transactions",
+						"report"
+					]
+				},
+				"description": "Get Transaction Report"
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{Bareer}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"transactionId\": \"1010904-1539176472-1293\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/transaction",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"transaction"
+					]
+				},
+				"description": "Get single transaction by transaction ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Client",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{Bareer}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"transactionId\": \"1010904-1539176472-1293\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/client",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"client"
+					]
+				},
+				"description": "Get customer information"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
