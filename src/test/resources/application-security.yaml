@@ -1,0 +1,5 @@
+security:
+  enabled: true
+jwt:
+  secret: financialhousetest
+  timeout: 1

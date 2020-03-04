@@ -1,0 +1,546 @@
+swagger: '2.0'
+info:
+  title: Financial House Reporting API
+  version: 1.0.0
+  description: This is a reporting API for Financial House.
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  clientIdHeader:
+    type: apiKey
+    in: header
+    name: Reporting-API-Client-Id
+security:
+  - clientIdHeader: []
+paths:
+  '/api/v3/merchant/user/login':
+    post:
+      responses:
+        '200':
+          description: 200 Ok
+          schema:
+            $ref: '#/definitions/LoginResponseData'
+        '401':
+          description: 401 Unauthorized
+        '500':
+          description: 500 Internal Server Error
+      tags:
+        - loginUser
+      summary: Enable user to login
+      description: Enable user to login
+      parameters:
+        - name: LoginRequestData
+          required: true
+          in: body
+          schema:
+            $ref: '#/definitions/LoginRequestData'
+          description: User login request data payload
+  '/api/v3/transactions/report':
+    post:
+      responses:
+        '200':
+          description: 200 Ok
+          schema:
+            $ref: '#/definitions/TransactionReportResponseData'
+        '401':
+          description: 401 Unauthorized
+        '500':
+          description: 500 Internal Server Error
+      tags:
+        - transactionReport
+      summary: Retrieve Transaction Reports
+      description: Retrieve Transaction Reports
+      parameters:
+        - name: page
+          type: integer
+          in: query
+          description: Page number
+        - name: Authorization
+          type: string
+          required: true
+          in: header
+          description: Authorization Bearer JWT
+        - name: TransactionReportRequestData
+          required: true
+          in: body
+          schema:
+            $ref: '#/definitions/TransactionReportRequestData'
+          description: Transaction Report request data payload
+  '/api/v3/transaction/list':
+    post:
+      responses:
+        '200':
+          description: 200 Ok
+          schema:
+            $ref: '#/definitions/TransactionListResponseData'
+        '401':
+          description: 401 Unauthorized
+        '500':
+          description: 500 Internal Server Error
+      tags:
+        - transactionList
+      summary: Retrieve Transaction List
+      description: Retrieve Transaction List
+      parameters:
+        - name: Authorization
+          type: string
+          required: true
+          in: header
+          description: Authorization Bearer JWT
+        - name: TransactionListRequestData
+          required: true
+          in: body
+          schema:
+            $ref: '#/definitions/TransactionListRequestData'
+          description: Transaction List request data payload
+  '/api/v3/transaction':
+    post:
+      responses:
+        '200':
+          description: 200 Ok
+          schema:
+            $ref: '#/definitions/TransactionResponseData'
+        '401':
+          description: 401 Unauthorized
+        '500':
+          description: 500 Internal Server Error
+      tags:
+        - transaction
+      summary: Retrieve Transaction
+      description: Retrieve Transaction
+      parameters:
+        - name: Authorization
+          type: string
+          required: true
+          in: header
+          description: Authorization Bearer JWT
+        - name: TransactionRequestData
+          required: true
+          in: body
+          schema:
+            $ref: '#/definitions/TransactionRequestData'
+          description: Transaction request data payload
+  '/api/v3/client':
+    post:
+      responses:
+        '200':
+          description: 200 Ok
+          schema:
+            $ref: '#/definitions/CustomerResponseData'
+        '401':
+          description: 401 Unauthorized
+        '500':
+          description: 500 Internal Server Error
+      tags:
+        - customerInfo
+      summary: Retrieve Customer Information
+      description: Retrieve Customer Information
+      parameters:
+        - name: TransactionRequestData
+          required: true
+          in: body
+          schema:
+            $ref: '#/definitions/TransactionRequestData'
+          description: Customer Information request data payload
+definitions:
+  LoginRequestData:
+    properties:
+      email:
+        type: string
+        description: Email address of merchant user.
+        example: merchant@test.com
+      password:
+        type: string
+        description: Password
+        example: 12345
+    description: User Login Request Data
+  LoginResponseData:
+    properties:
+      token:
+        type: string
+        description: JWT token
+        example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudFVzZXJJZCI6MSwicm9sZSI6ImFkbWluIiwi
+      status:
+        type: string
+        description: The API request status.
+        example: APPROVED
+    description: User Login Response Data
+  TransactionReportRequestData:
+    properties:
+      fromDate:
+        type: string
+        format: date
+        description: Start date
+        example: "2020-03-15"
+      toDate:
+        type: string
+        format: date
+        description: Finish date
+        example: "2020-03-29"
+      merchant:
+        type: integer
+        description: The merchant identifier.
+        example: 1
+      acquirer:
+        type: integer
+        description: The acquirer identifier.
+        example: 2
+    required:
+      - fromDate
+      - toDate
+    description: Transaction Report Request Data
+  TransactionReportResponseData:
+    properties:
+      status:
+        type: string
+        description: The API request status
+        example: "APPROVED"
+      response:
+        type: array
+        items:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Quantity transaction
+              example: 283
+            total:
+              type: integer
+              description: Total amount
+              example: 28300
+            currency:
+              type: string
+              description: Original currency
+              example: "USD"
+    description: Transaction Report Response Data
+  TransactionListRequestData:
+    properties:
+      fromDate:
+        type: string
+        format: date
+        description: Start date
+        example: "2020-03-15"
+      toDate:
+        type: string
+        format: date
+        description: Finish date
+        example: "2020-03-15"
+      status:
+        type: string
+        description: The API request status
+        example: "APPROVED"
+      operation:
+        type: string
+        description: Request operation
+        example: "3D"
+      merchantId:
+        type: integer
+        description: The merchant identifier
+        example: 1
+      acquirerId:
+        type: integer
+        description: The acquirer identifier
+        example: 2
+      paymentMethod:
+        type: string
+        description: The payment method
+        example: "CREDITCARD"
+      errorCode:
+        type: string
+        description: Error Code
+        example: "Invalid Card"
+      filterField:
+        type: string
+        description: Search by special field
+        example: "Customer Email"
+      filterValue:
+        type: string
+        description: Value of field
+        example: "xxxx@test.com.tr"
+      page:
+        type: integer
+        description: Number of page
+        example: 1
+    description: Transaction List Request Data
+  TransactionListResponseData:
+    properties:
+      per_page:
+        type: integer
+        description: Number of transaction for page
+        example: 50
+      current_page:
+        type: integer
+        description: Current page number
+        example: 2
+      next_page_url:
+        type: string
+        description: Url of next page
+        example: https://reporting.rpdpymnt.com/api/v3/transaction/list/?page=3
+      prev_page_url:
+        type: string
+        description: Url of precedent page
+        example: https://reporting.rpdpymnt.com/api/v3/transaction/list/?page=1
+      from:
+        type: integer
+        description: Index number
+        example: 50
+      to:
+        type: integer
+        description: Index number
+        example: 100
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/TransactionListData'
+    description: Transaction List Response Data
+  TransactionListData:
+    properties:
+      fx:
+        type: object
+        properties:
+          merchant:
+            type: object
+            properties:
+              originalAmount:
+                type: integer
+              originalCurrency:
+                type: string
+        description: FX information
+      customerInfo:
+        type: object
+        properties:
+          number:
+            type: string
+          email:
+            type: string
+          billingFirstName:
+            type: string
+          billingLastName:
+            type: string
+        description: Customer Information
+      merchant:
+        type: object
+        properties:
+          id:
+            type: integer
+          name:
+            type: string
+        description: Merchant Information
+      ipn:
+        type: object
+        properties:
+          received:
+            type: boolean
+        description: IPN Information
+      transaction:
+        type: object
+        properties:
+          merchant:
+            type: object
+            properties:
+              referenceNo:
+                type: string
+              status:
+                type: string
+              operation:
+                type: string
+              message:
+                type: string
+              created_at:
+                type: string
+              transactionId:
+                type: string
+        description: Transaction Information
+      acquirer:
+        type: object
+        properties:
+          id:
+            type: integer
+          name:
+            type: string
+          code:
+            type: string
+          type:
+            type: string
+        description: Acquirer Information
+      refundable:
+        type: boolean
+        description: Refundable Information
+    description: Transaction List Data
+  TransactionRequestData:
+    properties:
+      transactionId:
+        type: string
+        description: ID of Transaction
+        example: 529-1438673740-2
+    description: Transaction Information Request Data
+  CustomerResponseData:
+    properties:
+      customerInfo:
+        $ref: '#/definitions/CustomerInfo'
+    description: Customer Information Response Data
+  CustomerInfo:
+    properties:
+      id:
+        type: integer
+      created_at:
+        type: string
+      updated_at:
+        type: string
+      deleted_at:
+        type: string
+      number:
+        type: string
+      expiryMonth:
+        type: string
+      expiryYear:
+        type: string
+      startMonth:
+        type: string
+      startYear:
+        type: string
+      issueNumber:
+        type: string
+      email:
+        type: string
+      birthday:
+        type: string
+      gender:
+        type: string
+      billingTitle:
+        type: string
+      billingFirstName:
+        type: string
+      billingLastName:
+        type: string
+      billingCompany:
+        type: string
+      billingAddress1:
+        type: string
+      billingAddress2:
+        type: string
+      billingCity:
+        type: string
+      billingPostCode:
+        type: string
+      billingState:
+        type: string
+      billingCountry:
+        type: string
+      billingPhone:
+        type: string
+      billingFax:
+        type: string
+      shippingTitle:
+        type: string
+      shippingFirstName:
+        type: string
+      shippingLastName:
+        type: string
+      shippingCompany:
+        type: string
+      shippingAddress1:
+        type: string
+      shippingAddress2:
+        type: string
+      shippingCity:
+        type: string
+      shippingPostCode:
+        type: string
+      shippingState:
+        type: string
+      shippingCountry:
+        type: string
+      shippingPhone:
+        type: string
+      shippingFax:
+        type: string
+    description: Customer Information Response Data
+  TransactionResponseData:
+    properties:
+      fx:
+        type: object
+        properties:
+          merchant:
+            type: object
+            properties:
+              originalAmount:
+                type: integer
+              originalCurrency:
+                type: string
+        description: FX information
+      customerInfo:
+        $ref: '#/definitions/CustomerInfo'
+      merchant:
+        type: object
+        properties:
+          name:
+            type: string
+        description: Merchant Information
+      ipn:
+        type: object
+        properties:
+          received:
+            type: boolean
+        description: IPN Information
+      transaction:
+        type: object
+        properties:
+          merchant:
+            type: object
+            properties:
+              referenceNo:
+                type: string
+              merchantId:
+                type: integer
+              status:
+                type: string
+              channel:
+                type: string
+              customData:
+                type: string
+              chainId:
+                type: string
+              agentInfoId:
+                type: integer
+              operation:
+                type: string
+              fxTransactionId:
+                type: integer
+              updated_at:
+                type: string
+              created_at:
+                type: string
+              id:
+                type: integer
+              acquirerTransactionId:
+                type: integer
+              code:
+                type: string
+              message:
+                type: string
+              transactionId:
+                type: string
+              agent:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  customerUserIp:
+                    type: string
+                  customerUserAgent:
+                    type: string
+                  merchantIp:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+                  deleted_at:
+                    type: string
+    description: Transaction  Data
+tags: []
